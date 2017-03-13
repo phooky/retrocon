@@ -1,5 +1,5 @@
 module washer(location = [0,0,0]) {
-    ID = 8;
+    ID = 7.8;
     OD = 16.5;
     thickness = 5;
     translate(location)
@@ -23,6 +23,15 @@ module hole_stack(location = [0,0,0]) {
     }
 }
 
+module hole_cut(location = [0,0,0], rot=0) {
+    OD=18;
+    translate(location) {
+        translate([0,0,-5]) cylinder(d=OD,h=31);
+        rotate([0,0,1],a=45+rot) translate([0,-OD/2,-0.5]) cube([30,OD,20]);
+        hole();
+    }
+}
+
 horiz_hole_dist = 211;
 vert_hole_dist = 160;
 h2 = horiz_hole_dist/2; v2 = vert_hole_dist/2;
@@ -37,22 +46,41 @@ module screen() {
     intersection() {
         translate([0,0,radius])
         rotate(v=[0,1,0],a=90)
-        sphere(r=radius,$fn=100);
+        sphere(r=radius,$fn=150);
         cube([240,190,slice_height*2],center=true);
     }
 }
 
 module frustrum() {
+    w = 190;
+    h = 140;
+    chamfer = 10;
+    rotate(v=[0,1,0],a=180)
+    linear_extrude(height=20,scale=1.3)
+    {
+        translate([-w/2 + chamfer,-h/2 + chamfer,0]) circle(r=chamfer);
+        translate([-w/2 + chamfer,h/2 - chamfer,0]) circle(r=chamfer);
+        translate([w/2 - chamfer,-h/2 + chamfer,0]) circle(r=chamfer);
+        translate([w/2 - chamfer,h/2 - chamfer,0]) circle(r=chamfer);
+        square([w,h-2*chamfer],center=true);
+        square([w-2*chamfer,h],center=true);
+        //circle(r=100);
+    }
 }
 
 
-difference()
+//frustrum();
+
+
+#difference()
 {
     translate([0,0,-3])
         cube([230,180,19],center=true);
-    for( where = hole_locations ) {
-        hole_stack(where);
-    }
-    translate([0,0,-5.4]) screen();
+    hole_cut(hole_locations[0]);
+    hole_cut(hole_locations[1],-90);
+    hole_cut(hole_locations[2],90);
+    hole_cut(hole_locations[3],180);
+    translate([0,0,-9]) screen();
     frustrum();
 }
+
