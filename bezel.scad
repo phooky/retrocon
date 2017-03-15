@@ -25,10 +25,10 @@ module hole_stack(location = [0,0,0]) {
 
 module hole_cut(location = [0,0,0], rot=0) {
     OD=18;
+    
     translate(location) {
         translate([0,0,-5]) cylinder(d=OD,h=31);
         rotate([0,0,1],a=45+rot) translate([0,-OD/2,-0.5]) cube([30,OD,20]);
-        hole();
     }
 }
 
@@ -47,32 +47,33 @@ module screen() {
         translate([0,0,radius])
         rotate(v=[0,1,0],a=90)
         sphere(r=radius,$fn=150);
-        cube([240,190,slice_height*2],center=true);
+        cube([222,172,slice_height*2],center=true);
     }
 }
 
-module frustrum() {
+module frustrum_2d() {
     w = 190;
     h = 140;
     chamfer = 10;
+    translate([-w/2 + chamfer,-h/2 + chamfer,0]) circle(r=chamfer);
+    translate([-w/2 + chamfer,h/2 - chamfer,0]) circle(r=chamfer);
+    translate([w/2 - chamfer,-h/2 + chamfer,0]) circle(r=chamfer);
+    translate([w/2 - chamfer,h/2 - chamfer,0]) circle(r=chamfer);
+    square([w,h-2*chamfer],center=true);
+    square([w-2*chamfer,h],center=true);
+}
+
+module frustrum() {
+    translate([0,0,-10]) linear_extrude(height=20) frustrum_2d();
     rotate(v=[0,1,0],a=180)
-    linear_extrude(height=20,scale=1.3)
-    {
-        translate([-w/2 + chamfer,-h/2 + chamfer,0]) circle(r=chamfer);
-        translate([-w/2 + chamfer,h/2 - chamfer,0]) circle(r=chamfer);
-        translate([w/2 - chamfer,-h/2 + chamfer,0]) circle(r=chamfer);
-        translate([w/2 - chamfer,h/2 - chamfer,0]) circle(r=chamfer);
-        square([w,h-2*chamfer],center=true);
-        square([w-2*chamfer,h],center=true);
-        //circle(r=100);
-    }
+    linear_extrude(height=10,scale=1.3) frustrum_2d();
 }
 
 
 //frustrum();
 
 
-#difference()
+difference()
 {
     translate([0,0,-3])
         cube([230,180,19],center=true);
@@ -80,7 +81,6 @@ module frustrum() {
     hole_cut(hole_locations[1],-90);
     hole_cut(hole_locations[2],90);
     hole_cut(hole_locations[3],180);
-    translate([0,0,-9]) screen();
-    frustrum();
+    translate([0,0,-7]) screen();
+    translate([0,0,-8]) frustrum();
 }
-
