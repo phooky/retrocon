@@ -13,7 +13,9 @@ Okay, we're in the home stretch. Here are some design constraints and notes.
   * Plastic: Rep1 style? Thermoformed? Cut panels? Acrylic: too brittle.
     HDPE: very bendy. ABS? can't laser but strong. Poly? Delrin?
 
-* Design files should all be in solvespace. Needed parts:
+* CAD program: solvespace doesn't do boolean intersections??? What options
+  are there?
+* Design files should all be in ???. Needed parts:
   * Monitor driver PCB
   * Monitor
   * Power conditioning board
