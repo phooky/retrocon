@@ -12,3 +12,10 @@ Okay, we're in the home stretch. Here are some design constraints and notes.
   * Wood: painted or stained?
   * Plastic: Rep1 style? Thermoformed? Cut panels? Acrylic: too brittle.
     HDPE: very bendy. ABS? can't laser but strong. Poly? Delrin?
+
+* Design files should all be in solvespace. Needed parts:
+  * Monitor driver PCB
+  * Monitor
+  * Power conditioning board
+  * Rough box for BBB/adapter
+
